@@ -14,16 +14,29 @@ Laravel 5.*
 
 ### How do I get set up? ###
 
-* Clone package from repo
-* Set your composer for autoload Simple Search classes and update it
+* Clone package from repo and set your composer for autoload Simple Search classes and update it
 
 ```
  "autoload": {
     "classmap":
-      "path_to_package"
-    ],
+      "path_to_packages"
+    ]
+ }
 ```
-
+* Or you can add repository to composer and make composer update
+```
+{
+    "repositories": [
+        {
+            "type": "vcs",
+            "url": "https://github.com/vladidit/simplesearch.git"
+        }
+    ],
+    "require": {
+        "vladidit/simplesearch": "1.*"
+    }
+}
+```
 * Add service provider to config/app.php
 
 ```
