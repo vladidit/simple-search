@@ -1,5 +1,8 @@
 # Simple Search for Laravel #
-This package provides search argorithm for laravel projects. It\'s simple and clear. The magic is in using lemmas from query words, thanks for phpMorhy.
+This package provides search algorithm for laravel projects. It's simple and clear. The magic is in using lemmas from query words, thanks for phpMorhy.
+
+### Required ###
+Laravel 5.*
 
 ### What Simple Search can do? ###
 
@@ -42,7 +45,7 @@ That's all! Simple Search ready to use.
 Simple Search provides few public methods to configure your search request on a fly.
 Config files just a place for storing your search request settings and at this moment contains a number of tips and disclaimers.
 
-So, first af all, you need to create an instance of SimpleSearch::class, set query string and search array.
+So, first of all, you need to create an instance of SimpleSearch::class, set query string and search array.
 
 ```
 use Vladidit\SimpleSearch\Search;
