@@ -1,9 +1,9 @@
-# Simple Search for Laravel 5.* #
+# Simple Search for Laravel #
 This package provides search argorithm for laravel projects. It\'s simple and clear. The magic is in using lemmas from query words, thanks for phpMorhy.
 
 ### What Simple Search can do? ###
 
-* Find occurancies of lemmas in array of tables
+* Find occurrences of lemmas in array of tables
 * Count rating of found results
 * Associate models to each result in collection
 * Paginate collection of search results
@@ -11,8 +11,8 @@ This package provides search argorithm for laravel projects. It\'s simple and cl
 
 ### How do I get set up? ###
 
-0. Clone package from repo
-1. Set your composer file to autoload Simple Search classes and update autoload files
+* Clone package from repo
+* Set your composer for autoload Simple Search classes and update it
 
 ```
  "autoload": {
@@ -21,16 +21,16 @@ This package provides search argorithm for laravel projects. It\'s simple and cl
     ],
 ```
 
-2. Add service provider to config/app.php
+* Add service provider to config/app.php
 
 ```
  Vladidit\SimpleSearch\SimpleSearchServiceProvider::class,
 ```
-3. Publish assets for live search
+* If you need a front end solution for live-search, publish assets for live search
 ```
  php artisan vendor:publish --tag=simple_search.assets
 ```
-4. Publish config example
+* Publish config examples
 ```
  php artisan vendor:publish --tag=simple_search.configs
 ```
@@ -78,10 +78,10 @@ $searchArray = [
     
     /* define fields and their weights
     * If you do not need to assign special weight for certain fields - you can leave array value just as field name and Simple Search will assign 1 as weight to this field
-    * Weight is a rating for every unique occurence of requested word in field. So if word present in two grammar form in one field - Simple Search will operate this occurensies as one.
+    * Weight is a rating for every unique occurrence of requested word in field. So if word present in two grammar form in one field - Simple Search will operate this occurrences as one.
     * For example, rating of field value ('prawn prawns') will be the same as field value ('prawn') of ('prawns').
     * As a result of search Simple Search give a summary rating for each row in table or model. This value is main parameter to order search results.
-    * Row in table with occurance of requested word only in title will get lower rating then next row with occurancies in 'title' and 'summary', or 'description'.
+    * Row in table with occurrence of requested word only in title will get lower rating then next row with occurrences in 'title' and 'summary', or 'description'.
     */
     
     'fields' => [
@@ -91,7 +91,7 @@ $searchArray = [
     ],
     
     /* define fields for fill your models
-    * This fields will be selected from your target table and wil be used to fill associated model. 
+    * This fields will be selected from your target table and will be used to fill associated model. 
     * If you need to select all fields to fill: set only one '*' value
     */
     
@@ -110,3 +110,15 @@ After that you can get search results:
 ```
 $searchResult = $mySimpleSearch->searchOne()
 ```
+
+### Adding scopes ###
+
+### Set limits ###
+
+### Ignore words and get total count ###
+
+### Extend your search query ###
+
+### Paginate results ###
+
+### Mark text ###
