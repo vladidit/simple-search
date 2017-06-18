@@ -1,0 +1,16 @@
+{  
+    "name": "vladidit/simplesearch",
+    "description": "Package for simple search.",
+    "keywords": ["simple search", "laravel"],
+    "license": "MIT",
+    "type": "package",
+    "authors": [
+        {
+            "name": "Vlad Didenko",
+            "email": "didenko@jot.com.ua"
+        }
+    ],
+    "require": {
+        "php": ">=5.6.4"
+    }
+}    
