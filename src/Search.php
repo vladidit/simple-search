@@ -1,8 +1,8 @@
 <?php
 /* Simple search engine
  * by vladidit
- * v0.4
- * modified 04.05.2017
+ * v1.0.1
+ * modified 18.07.2017
  *
 */
 
@@ -21,16 +21,14 @@ class Search
     private $searchArray = [];
     private $limit;
     private $cleanQuery = [];
-//    private $markClass;
-//    private $marked = [];
+    private $markClass;
+    private $marked = [];
     private $minLength = 2;
     private $substr = 0;
     private $morphy;
 
     public function __construct($query = '', $searchArray = [])
     {
-
-        $this->checkSchema();
 
         if ($query) $this->setQuery($query);
 
@@ -40,13 +38,10 @@ class Search
 
     }
 
-    private function checkSchema()
-    {
-
-        //todo check if index table is exists. if not - create one (id, model, content)
-        return true;
-    }
-
+    /**
+    * Sets requested query for instance
+    * @return $this
+    */
     public function setQuery($query = '')
     {
         if ($query)
@@ -80,12 +75,53 @@ class Search
         return $this;
     }
 
+    /**
+     * Sets min length of each query word. If word's length is not enough it will be ignored
+     * @param $length
+     * @return $this
+     */
     public function setMinLength($length)
     {
-
         $this->minLength = $length;
 
         return $this;
+    }
+
+    public function searchOne($optionsArray)
+    {
+
+        $this->clearQuery();
+
+        if (!$this->cleanQuery) return $this;
+
+        $preparedResults = $this->prepareResult($optionsArray);
+
+        $this->collection = array_merge($this->collection, $preparedResults->found);
+
+        $this->count = $this->count + $preparedResults->count;
+
+        $this->fillModels($preparedResults->found);
+
+        $this->sortBy('relTotal');
+
+        return $this;
+    }
+
+    private function sortBy($field, $direction = 'asc')
+    {
+        usort($this->collection, create_function('$a, $b', '
+            $a = $a["' . $field . '"];
+            $b = $b["' . $field . '"];
+    
+            if ($a == $b)
+            {
+                return 0;
+            }
+    
+            return ($a ' . ($direction == 'desc' ? '>' : '<') .' $b) ? -1 : 1;
+        '));
+
+        return true;
     }
 
     public function searchMany()
@@ -99,23 +135,6 @@ class Search
         return $this;
     }
 
-    public function searchOne($options)
-    {
-
-        $this->clearQuery();
-
-        if (!$this->cleanQuery) return $this;
-
-        $preparedResults = $this->prepareResult($options);
-
-        $this->fillModels($preparedResults->found);
-
-        $this->collection = $this->collection->merge($preparedResults->found);
-        $this->collection = $this->collection->sortByDesc('relTotal');
-        $this->count = $this->count + $preparedResults->count;
-
-        return $this;
-    }
 
 
     /**
@@ -141,7 +160,7 @@ class Search
                 foreach ($roots as $root) {
                     $queryRoots[] = $root;
                 }
-            }else{
+            } else {
                 $queryRoots[] = $q;
             }
         }
@@ -159,7 +178,7 @@ class Search
                     foreach ($roots as $root) {
                         $cleanQuery[] = $root;
                     }
-                }else{
+                } else {
                     $cleanQuery[] = $q;
                 }
             }
@@ -199,10 +218,30 @@ class Search
         return $result;
     }
 
+
+    /**
+     * Check does table search_extension exist
+     * @return bool
+     */
+    private function checkExtensionSchema()
+    {
+
+        return Schema::hasTable('search_extensions');
+    }
+
+
+    /**
+     * Extends query with extensions from table
+     * @param $query
+     * @return array
+     */
     private function getQueryExtension($query)
     {
 
         $result = [];
+
+        if (!$this->checkExtensionSchema())
+            return $result;
 
         if (!$query) return $result;
 
@@ -220,7 +259,6 @@ class Search
         }
 
         $groups = $groups->get();
-
 
 
         foreach ($groups as $group) {
@@ -274,7 +312,8 @@ class Search
         return $this;
     }
 
-    public function getLimit(){
+    public function getLimit()
+    {
 
         return $this->limit;
     }
@@ -362,7 +401,7 @@ class Search
     private function prepareResult($options)
     {
 
-        $result = (object) ['found' => [], 'count' => 0];
+        $result = (object)['found' => [], 'count' => 0];
 
         $likeArray = [];
         $caseArray = [];
@@ -432,7 +471,7 @@ class Search
                 $fillField = $options['table'] . '.' . $fillField;
             }
             $query->select(DB::raw('SQL_CALC_FOUND_ROWS ' . implode(',', $options['fill']) . ', "' . $options['model'] . '" as `model`,' . $relTotal . ' as relTotal'));
-        }else{
+        } else {
             $query->select(DB::raw('SQL_CALC_FOUND_ROWS ' . $options['table'] . '.*'));
         }
 
