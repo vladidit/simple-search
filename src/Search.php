@@ -9,6 +9,7 @@
 namespace Vladidit\SimpleSearch;
 
 use DB;
+use Schema;
 use phpMorphy;
 
 class Search
@@ -17,6 +18,7 @@ class Search
     public $count = 0;
     public $collection = [];
     public $perPage;
+    public $locale = null;
 
     private $searchArray = [];
     private $limit;
@@ -33,8 +35,6 @@ class Search
         if ($query) $this->setQuery($query);
 
         if ($searchArray) $this->setSearchArray($searchArray);
-
-        $this->collection = collect($this->collection);
 
     }
 
@@ -87,8 +87,10 @@ class Search
         return $this;
     }
 
-    public function searchOne($optionsArray)
+    public function searchOne($optionsArray = [])
     {
+
+        $optionsArray = $optionsArray ? : $this->searchArray;
 
         $this->clearQuery();
 
@@ -96,32 +98,19 @@ class Search
 
         $preparedResults = $this->prepareResult($optionsArray);
 
-        $this->collection = array_merge($this->collection, $preparedResults->found);
+        if ($preparedResults->found)
+            $this->collection = array_merge($this->collection, $preparedResults->found);
 
         $this->count = $this->count + $preparedResults->count;
 
-        $this->fillModels($preparedResults->found);
-
         $this->sortBy('relTotal');
 
+        if (isset($optionsArray['model']))
+            $this->fillModels($preparedResults->found);
+
+
+
         return $this;
-    }
-
-    private function sortBy($field, $direction = 'asc')
-    {
-        usort($this->collection, create_function('$a, $b', '
-            $a = $a["' . $field . '"];
-            $b = $b["' . $field . '"];
-    
-            if ($a == $b)
-            {
-                return 0;
-            }
-    
-            return ($a ' . ($direction == 'desc' ? '>' : '<') .' $b) ? -1 : 1;
-        '));
-
-        return true;
     }
 
     public function searchMany()
@@ -135,7 +124,24 @@ class Search
         return $this;
     }
 
+    private function sortBy($field, $direction = 'asc')
+    {
+        $array = $this->collection;
+        usort($array, create_function('$a, $b', '
+            $a = $a["' . $field . '"];
+            $b = $b["' . $field . '"];
+    
+            if ($a == $b)
+            {
+                return 0;
+            }
+    
+            return ($a ' . ($direction == 'desc' ? '>' : '<') .' $b) ? -1 : 1;
+        '));
 
+        $this->collection = $array;
+        return true;
+    }
 
     /**
      * clean entire query of spaces and special chars, substruct words, put result to private var
@@ -472,7 +478,7 @@ class Search
             }
             $query->select(DB::raw('SQL_CALC_FOUND_ROWS ' . implode(',', $options['fill']) . ', "' . $options['model'] . '" as `model`,' . $relTotal . ' as relTotal'));
         } else {
-            $query->select(DB::raw('SQL_CALC_FOUND_ROWS ' . $options['table'] . '.*'));
+            $query->select(DB::raw('SQL_CALC_FOUND_ROWS ' . $options['table'] . '.*,' . $relTotal . ' as relTotal'));
         }
 
         if (isset($options['scopes']) && $options['scopes']) {
@@ -485,7 +491,7 @@ class Search
             $query->take($this->getLimit());
         }
 
-        $result->found = $query->get();
+        $result->found = $query->get()->toArray();
         $result->count = DB::select(DB::raw('select FOUND_ROWS() as found_count'))[0]->found_count;
 
         return $result;

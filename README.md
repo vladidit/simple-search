@@ -136,6 +136,20 @@ $searchResult = $mySimpleSearch->searchOne()
 
 ### Adding scopes ###
 
+You can add additional scopes for search iteration by using setScope() method or put scopes in scopes index in search array.
+```
+$mySimpleSearch->setScopes([
+    function($query){
+      return $query->where('YOUR PROPERTY 1 NAME', 'SOME VALUE');
+    },
+    ...
+    function($query){
+       return $query->where('YOUR PROPERTY 2 NAME', 'SOME VALUE');
+    },
+]);
+```
+As a result your search query will be extended by addition conditions.
+
 ### Set limits ###
 
 ### Ignore words and get total count ###
