@@ -103,6 +103,8 @@ class Search
 
         $this->count = $this->count + $preparedResults->count;
 
+        var_dump($preparedResults->found);
+
         $this->sortBy('relTotal');
 
         if (isset($optionsArray['model']))
@@ -127,19 +129,26 @@ class Search
     private function sortBy($field, $direction = 'asc')
     {
         $array = $this->collection;
-        usort($array, create_function('$a, $b', '
-            $a = $a["' . $field . '"];
-            $b = $b["' . $field . '"];
-    
-            if ($a == $b)
-            {
+
+        usort($array, function($a, $b) use ($field, $direction){
+
+            $a = $a[$field];
+            $b = $b[$field];
+
+            if ($a == $b) {
                 return 0;
             }
-    
-            return ($a ' . ($direction == 'desc' ? '>' : '<') .' $b) ? -1 : 1;
-        '));
+
+            if($direction == "desc"){
+                return ($a < $b) ? -1 : 1;
+            }elseif($direction == "asc"){
+                return ($a > $b) ? -1 : 1;
+            }
+
+        });
 
         $this->collection = $array;
+
         return true;
     }
 
@@ -492,6 +501,10 @@ class Search
         }
 
         $result->found = $query->get()->toArray();
+
+        foreach($result->found as &$obj){
+            $obj = (array) $obj;
+        }
         $result->count = DB::select(DB::raw('select FOUND_ROWS() as found_count'))[0]->found_count;
 
         return $result;
