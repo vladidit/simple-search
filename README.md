@@ -19,7 +19,7 @@ Laravel 5.*
 ```
  "autoload": {
     "classmap":
-      "path_to_packages"
+      "PATH TO PACKAGES"
     ]
  }
 ```
@@ -29,7 +29,7 @@ Laravel 5.*
     "repositories": [
         {
             "type": "vcs",
-            "url": "https://github.com/vladidit/simplesearch.git"
+            "url": "https://github.com/vladidit/simple-search.git"
         }
     ],
     "require": {
@@ -42,7 +42,7 @@ Laravel 5.*
 ```
  Vladidit\SimpleSearch\SimpleSearchServiceProvider::class,
 ```
-* If you need a front end solution for live-search, publish assets for live search
+* If you need a front end solution for live-search, publish live search assets
 ```
  php artisan vendor:publish --tag=simple_search.assets
 ```
@@ -74,7 +74,7 @@ SimpleSearch has a constructor, so you can create its instance with arguments:
 $mySimpleSearch = new SimpleSearch(string $query, array $searchArray);
 ```
 
-But before you need to create your search array to tell Simple Search where and what to search.
+But before you need to create your search array to tell Simple Search where and what to look for.
 
 There is an example of simple search array.
 
@@ -87,14 +87,14 @@ $searchArray = [
 
    'table' => 'products',
 
-   /* define model to associate with search results. */
+   /* define model to associate with search results. You can skip this step if you don't need to use associated model with search results */
 
    'model' => 'Product',
 
    /* define fields and their weights
    * If you do not need to assign special weight for certain fields - you can leave array value just as field name and Simple Search will assign 1 as weight to this field
    * Weight is a rating for every unique occurrence of requested word in field. So if word present in two grammar form in one field - Simple Search will operate this occurrences as one.
-   * For example, rating of field value ('prawn prawns') will be the same as field value ('prawn') of ('prawns').
+   * For example, rating of field value ('prawn prawns') will be the same as field value ('prawn') or ('prawns').
    * As a result of search Simple Search give a summary rating for each row in table or model. This value is main parameter to order search results.
    * Row in table with occurrence of requested word only in title will get lower rating then next row with occurrences in 'title' and 'summary', or 'description'.
    */
@@ -152,6 +152,10 @@ As a result your search query will be extended by addition conditions.
 
 ### Set limits ###
 
+Limits will help you to make search results shorter because of adding LIMIT to each sql query and, if you are using searchMany() method, to final merged collection.
+```
+$mySimpleSearch->setLimit(3);
+```
 ### Ignore words and get total count ###
 
 ### Extend your search query ###
