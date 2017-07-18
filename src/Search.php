@@ -103,14 +103,10 @@ class Search
 
         $this->count = $this->count + $preparedResults->count;
 
-        var_dump($preparedResults->found);
-
         $this->sortBy('relTotal');
 
         if (isset($optionsArray['model']))
             $this->fillModels($preparedResults->found);
-
-
 
         return $this;
     }
