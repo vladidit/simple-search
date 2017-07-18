@@ -39,9 +39,9 @@ class Search
     }
 
     /**
-    * Sets requested query for instance
-    * @return $this
-    */
+     * Sets requested query for instance
+     * @return $this
+     */
     public function setQuery($query = '')
     {
         if ($query)
@@ -64,7 +64,7 @@ class Search
     }
 
     /**
-     * Sets substract limits array
+     * Sets how many symbols will be removed from end of the each entire word
      * @param array $searchArray
      * @return $this
      */
@@ -76,7 +76,7 @@ class Search
     }
 
     /**
-     * Sets min length of each query word. If word's length is not enough it will be ignored
+     * Sets min length of each query word. If entire word's length is not enough it will be ignored
      * @param $length
      * @return $this
      */
@@ -90,7 +90,7 @@ class Search
     public function searchOne($optionsArray = [])
     {
 
-        $optionsArray = $optionsArray ? : $this->searchArray;
+        $optionsArray = $optionsArray ?: $this->searchArray;
 
         $this->clearQuery();
 
@@ -105,6 +105,9 @@ class Search
 
         $this->sortBy('relTotal');
 
+        if ($this->getLimit())
+            $this->collection = array_slice($this->collection, 0, $this->getLimit());
+
         if (isset($optionsArray['model']))
             $this->fillModels($preparedResults->found);
 
@@ -113,20 +116,25 @@ class Search
 
     public function searchMany()
     {
-
         foreach ($this->searchArray as $options) {
 
             $this->searchOne($options);
         }
 
+        $this->sortBy('relTotal');
+
+        if ($this->getLimit())
+            $this->collection = array_slice($this->collection, 0, $this->getLimit());
+
         return $this;
     }
+
 
     private function sortBy($field, $direction = 'asc')
     {
         $array = $this->collection;
 
-        usort($array, function($a, $b) use ($field, $direction){
+        usort($array, function ($a, $b) use ($field, $direction) {
 
             $a = $a[$field];
             $b = $b[$field];
@@ -135,9 +143,9 @@ class Search
                 return 0;
             }
 
-            if($direction == "desc"){
+            if ($direction == "desc") {
                 return ($a < $b) ? -1 : 1;
-            }elseif($direction == "asc"){
+            } elseif ($direction == "asc") {
                 return ($a > $b) ? -1 : 1;
             }
 
@@ -149,13 +157,14 @@ class Search
     }
 
     /**
-     * clean entire query of spaces and special chars, substruct words, put result to private var
+     * clean entire query of spaces and special chars, substract words, put result to private var
      * @param string $query
      * @return array|bool
      */
     private function clearQuery()
     {
-        if (!$this->query) return [];
+        if (!$this->query)
+            return [];
 
         $queryRoots = [];
 
@@ -271,7 +280,6 @@ class Search
 
         $groups = $groups->get();
 
-
         foreach ($groups as $group) {
 
             $groupArray = explode(',', preg_replace('/[^!,\.\_\w\s]/u', ' ', strip_tags($group->$property)));
@@ -333,10 +341,7 @@ class Search
     {
 
         $this->perPage = $perPage;
-        $this->collection = $this->collection->slice(
-            (int)request()->input('page', 1) * $perPage - $perPage,
-            $perPage
-        );
+        $this->collection = array_slice($this->collection, (int)request()->input('page', 1) * $perPage - $perPage, $perPage);
 
         return $this->collection;
     }
@@ -498,8 +503,8 @@ class Search
 
         $result->found = $query->get()->toArray();
 
-        foreach($result->found as &$obj){
-            $obj = (array) $obj;
+        foreach ($result->found as &$obj) {
+            $obj = (array)$obj;
         }
         $result->count = DB::select(DB::raw('select FOUND_ROWS() as found_count'))[0]->found_count;
 
