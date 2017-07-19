@@ -109,7 +109,7 @@ class Search
             $this->collection = array_slice($this->collection, 0, $this->getLimit());
 
         if (isset($optionsArray['model']))
-            $this->fillModels($preparedResults->found);
+            $this->fillModels($this->collection);
 
         return $this;
     }
