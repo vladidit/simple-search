@@ -1,5 +1,5 @@
 # Simple Search for Laravel #
-This package provides search algorithm for laravel projects. It's simple and clear. The magic is in using lemmas from query words, thanks for phpMorhy.
+This package provides search algorithm for laravel projects. It's simple and clear. The magic is in using lemmas from query words, thanks for phpMorhy and https://github.com/s-litvin for help.
 
 ### Required ###
 Laravel 5.*
