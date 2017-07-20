@@ -209,6 +209,11 @@ class Search
         $this->cleanQuery = $cleanQuery;
     }
 
+    public function getCleanQuery(){
+
+        return $this->cleanQuery;
+    }
+
     private function getRoots($word)
     {
 
