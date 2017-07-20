@@ -1,5 +1,5 @@
 {  
-    "name": "vladidit/simplesearch",
+    "name": "vladidit/simple_search",
     "description": "Package for simple search.",
     "keywords": ["simple search", "laravel"],
     "license": "MIT",
@@ -12,5 +12,10 @@
     ],
     "require": {
         "php": ">=5.5"
+    },
+    "autoload": {
+        "psr-4": {
+            "Vladidit\\SimpleSearch\\": "/vladidit/simple_search/src"
+        }
     }
 }    
