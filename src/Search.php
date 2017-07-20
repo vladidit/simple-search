@@ -109,7 +109,7 @@ class Search
             $this->collection = array_slice($this->collection, 0, $this->getLimit());
 
         if (isset($optionsArray['model']))
-            $this->fillModels($this->collection);
+            $this->fillModels();
 
         return $this;
     }
@@ -246,7 +246,7 @@ class Search
     private function checkExtensionSchema()
     {
 
-        return Schema::hasTable('search_extensions');
+        return Schema::hasTable('search_extensions') && $this->getLocale();
     }
 
 
@@ -295,7 +295,7 @@ class Search
     public function getLocale()
     {
 
-        return $this->locale ?: config('app.locale');
+        return $this->locale;
     }
 
     public function getDictionary()
@@ -511,14 +511,14 @@ class Search
         return $result;
     }
 
-    private function fillModels(&$collection)
+    private function fillModels()
     {
-        foreach ($collection as &$foundItem) {
+        foreach ($this->collection as &$foundItem) {
 
+            $foundItem = (object) $foundItem;
             $model = new $foundItem->model;
-            $model->setRawAttributes((array)$foundItem);
+            $model->setRawAttributes((array) $foundItem);
             $foundItem->model = $model;
-
         }
     }
 
