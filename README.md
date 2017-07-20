@@ -159,10 +159,3 @@ Limits will help you to make search results shorter because of adding LIMIT to e
 ```
 $mySimpleSearch->setLimit(3);
 ```
-### Total count ###
-
-### Extend your search query ###
-
-### Paginate results ###
-
-### Mark text ###
