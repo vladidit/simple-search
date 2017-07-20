@@ -3,7 +3,7 @@
     "description": "Package for simple search.",
     "keywords": ["simple search", "laravel"],
     "license": "MIT",
-    "type": "library",
+    "type": "package",
     "authors": [
         {
             "name": "Vlad Didenko",
