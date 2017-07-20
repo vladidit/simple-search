@@ -23,7 +23,7 @@ Laravel 5.*
     ]
  }
 ```
-* Or you can add repository to composer and make composer update
+* OR you can add repository to composer, set simple search as requred package and make composer update. As a result simple search will be instaled as vendor.
 ```
 {
     "repositories": [
@@ -33,7 +33,7 @@ Laravel 5.*
         }
     ],
     "require": {
-        "vladidit/simplesearch": "1.*"
+        "vladidit/simple_search": "0.*"
     }
 }
 ```
@@ -134,6 +134,9 @@ After that you can get search results:
 $searchResult = $mySimpleSearch->searchOne()
 ```
 
+### Search results ###
+
+
 ### Adding scopes ###
 
 You can add additional scopes for search iteration by using setScope() method or put scopes in scopes index in search array.
@@ -156,7 +159,7 @@ Limits will help you to make search results shorter because of adding LIMIT to e
 ```
 $mySimpleSearch->setLimit(3);
 ```
-### Ignore words and get total count ###
+### Total count ###
 
 ### Extend your search query ###
 
