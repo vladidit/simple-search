@@ -11,6 +11,7 @@ namespace Vladidit\SimpleSearch;
 use DB;
 use Schema;
 use phpMorphy;
+include (__DIR__ . '/morphy/common.php');
 
 class Search
 {
