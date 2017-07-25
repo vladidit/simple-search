@@ -506,12 +506,17 @@ class Search
             $query->take($this->getLimit());
         }
 
-        $result->found = $query->get()->toArray();
+        $result->found = $query->get();
+
+        $result->found = is_array($result->found) ? $result->found : $result->found->toArray();
 
         foreach ($result->found as &$obj) {
             $obj = (array)$obj;
         }
-        $result->count = DB::select(DB::raw('select FOUND_ROWS() as found_count'))[0]->found_count;
+
+        $result->count = DB::select(DB::raw('select FOUND_ROWS() as found_count'))[0];
+
+        $result->count = is_array($result->count) ? $result->count['found_count'] : $result->count->found_count;
 
         return $result;
     }
