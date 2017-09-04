@@ -135,8 +135,11 @@ class Search
     {
         $array = $this->collection;
 
-        usort($array, function ($a, $b) use ($field, $direction) {
-
+        usort($array, function ($as, $bs) use ($field, $direction) {
+            
+            $as = (array) $as;
+            $bs = (array) $bs;
+            
             $a = $a[$field];
             $b = $b[$field];
 
