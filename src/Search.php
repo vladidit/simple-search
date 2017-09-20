@@ -140,8 +140,8 @@ class Search
             $as = (array) $as;
             $bs = (array) $bs;
             
-            $a = $a[$field];
-            $b = $b[$field];
+            $a = $as[$field];
+            $b = $bs[$field];
 
             if ($a == $b) {
                 return 0;
