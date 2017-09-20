@@ -1,9 +1,6 @@
 <?php
 /* Simple search engine
  * by vladidit
- * v1.0.1
- * modified 18.07.2017
- *
 */
 
 namespace Vladidit\SimpleSearch;
