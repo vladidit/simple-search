@@ -156,9 +156,21 @@ $mySimpleSearch->setScopes([
 ```
 As a result your search query will be extended by addition conditions.
 
-### Set limits ###
+### Set limits, offsets ###
 
 Limits will help you to make search results shorter because of adding LIMIT to each sql query and, if you are using searchMany() method, to final merged collection.
 ```
-$mySimpleSearch->setLimit(3);
+$mySimpleSearch->setLimit( (int) $value ;
+```
+Also you can get current limit value:
+```
+$mySimpleSearch->getLimit();
+```
+If current limit value is absent getLimit() method wil return null.
+The same way is used to manage offsets in search query.
+```
+$mySimpleSearch->setOffset( (int) $value );
+```
+```
+$mySimpleSearch->getOffset();
 ```
