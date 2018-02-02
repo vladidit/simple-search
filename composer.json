@@ -1,21 +1,25 @@
 {  
-    "name": "vladidit/simple_search",
+    "name": "vladidit/simple-search",
     "description": "Package for simple search.",
-    "keywords": ["simple search", "laravel"],
+    "keywords": ["simple search"],
     "license": "MIT",
-    "type": "package",
     "authors": [
         {
-            "name": "Vlad Didenko",
-            "email": "didenko@jot.com.ua"
+            "name": "Vladimir Didenko",
+            "email": "didenko@jot.com.ua",
+            "role": "Developer"
         }
     ],
     "require": {
         "php": ">=5.5"
     },
     "autoload": {
+        "classmap": [],
         "psr-0": {
-            "Vladidit\\SimpleSearch\\": "src/"
+          "Vladidit\\SimpleSearch\\": "src/"
+        },
+        "psr-4": {
+          "Vladidit\\SimpleSearch\\": "src/"
         }    
     }
-}    
+}
