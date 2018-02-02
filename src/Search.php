@@ -20,6 +20,7 @@ class Search
 
     private $searchArray = [];
     private $limit;
+    private $offset;
     private $cleanQuery = [];
     private $markClass;
     private $marked = [];
@@ -343,6 +344,18 @@ class Search
         return $this->limit;
     }
 
+    public function setOffset($offset){
+
+        $this->offset = (int) $offset;
+
+        return $this;
+    }
+
+    public function getOffset(){
+
+        return $this->offset;
+    }
+
     public function paginate($perPage = 12)
     {
 
@@ -505,6 +518,10 @@ class Search
 
         if ($this->getLimit()) {
             $query->take($this->getLimit());
+        }
+
+        if ($this->getOffset()) {
+            $query->skip($this->getOffset());
         }
 
         $result->found = $query->get();
