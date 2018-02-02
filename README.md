@@ -142,7 +142,7 @@ $searchResult = $mySimpleSearch->searchOne()
 
 ### Adding scopes ###
 
-You can add additional scopes for search iteration by using setScope() method or put scopes in scopes index in search array.
+You can add additional conditions as scopes for search iteration by using setScopes() method or put scopes in scopes index in search array.
 ```
 $mySimpleSearch->setScopes([
     function($query){
