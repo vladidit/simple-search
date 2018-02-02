@@ -8,7 +8,6 @@ Laravel 5.*
 
 * Find occurrences of lemmas in array of tables
 * Count rating of found results
-* Associate models to each result in collection
 * Paginate collection of search results
 * Integrate front end solution of live-search interface
 
@@ -41,6 +40,10 @@ Laravel 5.*
 
 ```
  Vladidit\SimpleSearch\SimpleSearchServiceProvider::class,
+```
+* You need to call --optimize or -o key in dump autoload command.
+```
+ composer dump-autoload --optimize
 ```
 * If you need a front end solution for live-search, publish live search assets
 ```
